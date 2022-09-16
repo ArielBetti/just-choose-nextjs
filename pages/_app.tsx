@@ -8,7 +8,8 @@ import "react-toastify/dist/ReactToastify.min.css";
 import "react-loading-skeleton/dist/skeleton.css";
 
 import { Container } from "../components/Atoms/Container";
-import { AppToastContainer } from "../components/Atoms/atoms";
+import { AppToastContainer, FlexBox } from "../components/Atoms/atoms";
+import { FaGithub, FaLinkedinIn, FaYoutube } from "react-icons/fa";
 const defaultTheme: DefaultTheme = theme;
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -28,6 +29,32 @@ function MyApp({ Component, pageProps }: AppProps) {
           <h3 style={{ cursor: "pointer" }}>{"<JustChoose/>"}</h3>
         </Link>
         <Component {...pageProps} />
+        <FlexBox
+          direction="column"
+          align="flex-start"
+          justify="flex-start"
+        >
+          <h2>Apoie o criador:</h2>
+          <FlexBox
+            direction="row"
+            align="flex-start"
+            justify="flex-start"
+            gap="sm"
+          >
+            <a target="_blank" href="https://github.com/ArielBetti">
+              <FaGithub cursor="pointer" size="30px" />
+            </a>
+            <a target="_blank" href="https://www.linkedin.com/in/ariel-betti/">
+              <FaLinkedinIn cursor="pointer" size="30px" />
+            </a>
+            <a
+              target="_blank"
+              href="https://www.youtube.com/channel/UCXCyTeW1V33Ki4PyMLCn2zg"
+            >
+              <FaYoutube cursor="pointer" size="30px" />
+            </a>
+          </FlexBox>
+        </FlexBox>
       </Container>
     </ThemeProvider>
   );
