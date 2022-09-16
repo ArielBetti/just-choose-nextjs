@@ -1,0 +1,2 @@
+export const JUST_CHOOSE_BASE_URI =
+  process.env.NEXT_PUBLIC_JUST_CHOOSE_BASE_API;
