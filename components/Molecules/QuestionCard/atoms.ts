@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { FlexBox } from "../../Atoms/atoms";
 
 export const Card = styled.div`
   display: flex;
@@ -15,6 +16,27 @@ export const Card = styled.div`
   height: 100%;
   min-height: 600px;
   position: relative;
+`;
+
+export const BadgesContainer = styled(FlexBox)`
+  margin-bottom: ${(props) => props?.theme?.spacing?.xs};
+`;
+
+export const AnswerBadge = styled.div<{ type: "yes" | "no" }>`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 5px;
+  background-color: ${(props) => props?.theme?.colors?.neutral?.pure};
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em,
+    rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em,
+    rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
+  border: 1px solid
+    ${(props) =>
+      props?.type === "yes"
+        ? props?.theme?.colors?.feedback?.success
+        : props?.theme?.colors?.feedback?.error};
+  border-radius: 5px;
 `;
 
 export const CardContent = styled.div`

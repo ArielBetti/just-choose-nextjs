@@ -1,12 +1,12 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 
 const useThemeDetector = () => {
   const [isDarkTheme, setIsDarkTheme] = useState<boolean>(false);
 
   useEffect(() => {
-    const test = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const observeWindow = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-    setIsDarkTheme(test);
+    setIsDarkTheme(observeWindow);
   }, []);
   return isDarkTheme;
 };

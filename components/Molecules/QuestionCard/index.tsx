@@ -20,11 +20,18 @@ interface IbuttonScape {
 }
 
 // ::
-const QuestionCard = ({ question }: { question: { question: string } }) => {
+const QuestionCard = ({
+  question,
+}: {
+  question: { question: string; answers: number };
+}) => {
   const router = useRouter();
   const { id } = router.query;
 
   // states
+  const [fakeQuestionAnsewrs, setFakeQuestionAnsewrs] = useState<number>(
+    question?.answers || 0
+  );
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
   const [invertedButtons, setInvertedButtons] = useState<boolean>(false);
   const [buttonPosition, setButtonPosition] = useState<DOMRect>();
@@ -96,6 +103,7 @@ const QuestionCard = ({ question }: { question: { question: string } }) => {
 
       setShowConfetti(true);
       notificationPush("success", "Resposta enviada com sucesso!");
+      setFakeQuestionAnsewrs(fakeQuestionAnsewrs + 1);
       return mutate(`/api/question/${id}`, data, false);
     } catch (error) {
       return notificationPush("error", "Ocorreu um erro no envio da resposta.");
@@ -107,7 +115,7 @@ const QuestionCard = ({ question }: { question: { question: string } }) => {
   }, [elementRef, buttonScape]);
 
   useEffect(() => {
-    if (buttonPosition?.x && cursorDistance <= 50 && invertedButtons) {
+    if (buttonPosition?.x && cursorDistance <= 70 && invertedButtons) {
       activeScape();
     }
   }, [
@@ -120,8 +128,12 @@ const QuestionCard = ({ question }: { question: { question: string } }) => {
     invertedButtons,
   ]);
 
+  useEffect(() => {
+    setFakeQuestionAnsewrs(question?.answers || 0);
+  }, [question]);
+
   return (
-    <FlexBox justify="center" align="center" direction="row">
+    <FlexBox justify="center" align="flex-start" direction="column">
       {showConfetti && (
         <Confetti
           width={width}
@@ -133,6 +145,23 @@ const QuestionCard = ({ question }: { question: { question: string } }) => {
           style={{ zIndex: 10 }}
         />
       )}
+      <Atom.BadgesContainer
+        gap="xxs"
+        justify="flex-start"
+        align="center"
+        direction="row"
+      >
+        <Atom.AnswerBadge type="yes">
+          <span>
+            Sim: <strong>{fakeQuestionAnsewrs}</strong>
+          </span>
+        </Atom.AnswerBadge>
+        <Atom.AnswerBadge type="no">
+          <span>
+            Não: <strong>0</strong>
+          </span>
+        </Atom.AnswerBadge>
+      </Atom.BadgesContainer>
       <Atom.Card onMouseMove={(event: any) => observeMousemose(event)}>
         <FlexBox justify="center" align="center" direction="row">
           <Atom.Question>
