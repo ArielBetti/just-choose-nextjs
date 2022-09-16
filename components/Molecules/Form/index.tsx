@@ -34,10 +34,10 @@ const Form = ({
       setMessage("");
       setError("");
 
-      notificationPush("success", "Pergunta cadastrada com sucesso!")
+      notificationPush("success", "Proposta cadastrada com sucesso!")
       return setId(`${JUST_CHOOSE_BASE_URI}/question/${data?.question?._id}`);
     } catch (error) {
-      notificationPush("error", "Ocoreu um erro no cadastro da pergunta.")
+      notificationPush("error", "Ocoreu um erro no cadastro da proposta.")
       return setMessage("Ocorreu um erro, tente novamente.");
     }
   };
@@ -51,7 +51,7 @@ const Form = ({
   };
 
   const validateErrors = () => {
-    if (!form?.question) return "Digite uma pergunta.";
+    if (!form?.question) return "Digite uma proposta.";
   };
 
   const handleSubmit = (e) => {
@@ -68,8 +68,8 @@ const Form = ({
     <FlexBox direction="column" justify="center" align="flex-start" gap="sm">
       <Input
         onChange={(e) => handleChange(e)}
-        label="Pergunta"
-        placeholder="Digite sua pergunta de uma resposta"
+        label="Proposta"
+        placeholder="Digite sua proposta de uma resposta"
       />
       <span>{form?.question?.length}/70</span>
       {error}

@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const QuestionSchema = new mongoose.Schema({
   question: {
     type: String,
-    required: [true, "Por favor digite sua pergunta"],
+    required: [true, "Por favor digite sua proposta"],
     maxlength: [70, "Name cannot be more than 60 characters"],
   },
   answers: {
