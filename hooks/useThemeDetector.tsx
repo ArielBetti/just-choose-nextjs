@@ -5,7 +5,7 @@ const useThemeDetector = () => {
 
   useEffect(() => {
     const test = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    console.log(test);
+
     setIsDarkTheme(test);
   }, []);
   return isDarkTheme;

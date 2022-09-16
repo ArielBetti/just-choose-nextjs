@@ -1,25 +1,23 @@
 import { useState } from "react";
-import styled, { useTheme, DefaultTheme } from "styled-components";
+import styled from "styled-components";
 import Form from "../components/Molecules/Form";
 import SharedLink from "../components/Molecules/SharedLink";
 import { FlexBox } from "../components/Atoms/atoms";
 
 const Index = () => {
   const [listLink, setListLink] = useState<string>("");
-  const theme: DefaultTheme = useTheme();
 
   const questionForm = {
     question: "",
   };
 
   const MainCard = styled(FlexBox)`
-    background-color: ${theme?.colors?.neutral?.pure};
+    background-color: ${(props) => props?.theme?.colors?.neutral?.pure};
     box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em,
       rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em,
       rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
     border-radius: 5px;
-    padding: ${theme?.spacing?.sm};
-    /* padding-bottom: ${theme?.spacing?.xl}; */
+    padding: ${(props) => props?.theme?.spacing?.sm};
   `;
 
   return (
