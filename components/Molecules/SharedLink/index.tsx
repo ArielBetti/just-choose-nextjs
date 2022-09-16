@@ -48,7 +48,7 @@ const SharedLink = ({ link }: { link: string }) => {
           </Atom.IconCard>
         </CopyToClipboard>
       </FlexBox>
-      <ReactTooltip backgroundColor={theme?.font?.colors?.dark} />
+      <ReactTooltip backgroundColor={theme?.font?.colors?.dark} textColor={theme?.font?.colors?.white} />
     </>
   );
 };

@@ -11,9 +11,9 @@ export const InputContainer = styled.div`
 
 export const InputComponent = styled.input<HTMLInputElement | any>`
   background-color: ${({ theme }: { theme: DefaultTheme }) =>
-    theme?.colors?.neutral[1]};
+    theme?.colors?.dark?.[1]};
   border: none;
-  color: ${({ theme }: { theme: DefaultTheme }) => theme?.font?.colors?.pure};
+  color: ${({ theme }: { theme: DefaultTheme }) => theme?.font?.colors?.white};
   font-size: 16px;
   padding: 10px;
   width: 100%;
@@ -23,7 +23,7 @@ export const InputComponent = styled.input<HTMLInputElement | any>`
     rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
 
   ::placeholder {
-    color: ${({ theme }: { theme: DefaultTheme }) => theme?.font?.colors?.[1]};
+    color: ${({ theme }: { theme: DefaultTheme }) => theme?.font?.colors?.white};
   }
 
   :disabled {
@@ -33,6 +33,8 @@ export const InputComponent = styled.input<HTMLInputElement | any>`
   }
 
   :read-only {
+    color: ${({ theme }: { theme: DefaultTheme }) =>
+      theme?.font?.colors?.white};
     ::placeholder {
       color: ${({ theme }: { theme: DefaultTheme }) =>
         theme?.font?.colors?.white};

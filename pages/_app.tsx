@@ -1,20 +1,29 @@
+import { useState, useEffect, useMemo } from "react";
+import useThemeDetector from "../hooks/useThemeDetector";
+
 import Head from "next/head";
 import Link from "next/link";
 import { AppProps } from "next/app";
 import { ThemeProvider, DefaultTheme } from "styled-components";
 import GlobalStyle from "../components/GlobalStyles";
-import { theme } from "../theme/index";
+import selectTheme from "../theme";
 import "react-toastify/dist/ReactToastify.min.css";
 import "react-loading-skeleton/dist/skeleton.css";
 
 import { Container } from "../components/Atoms/Container";
 import { AppToastContainer, FlexBox } from "../components/Atoms/atoms";
 import { FaGithub, FaLinkedinIn, FaYoutube } from "react-icons/fa";
-const defaultTheme: DefaultTheme = theme;
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const isDarkTheme = useThemeDetector();
+
+  // theme changer
+  const theme: DefaultTheme = isDarkTheme
+    ? selectTheme("dark")
+    : selectTheme("ligth");
+
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={theme}>
       <GlobalStyle />
       <AppToastContainer
         progressStyle={{ background: theme?.colors?.primary }}
@@ -29,11 +38,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <h3 style={{ cursor: "pointer" }}>{"<JustChoose/>"}</h3>
         </Link>
         <Component {...pageProps} />
-        <FlexBox
-          direction="column"
-          align="flex-start"
-          justify="flex-start"
-        >
+        <FlexBox direction="column" align="flex-start" justify="flex-start">
           <h2>Apoie o criador:</h2>
           <FlexBox
             direction="row"
