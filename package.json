@@ -1,4 +1,6 @@
 {
+  "author": "Ariel Betti",
+  "name": "just-choose",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -6,10 +8,24 @@
     "start": "next start"
   },
   "dependencies": {
+    "axios": "^0.27.2",
+    "import": "^0.0.6",
     "mongoose": "^6.0.11",
     "next": "latest",
     "react": "^17.0.2",
+    "react-confetti": "^6.1.0",
+    "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^17.0.2",
-    "swr": "^1.0.1"
+    "react-icons": "^4.4.0",
+    "react-loading-skeleton": "^3.1.0",
+    "react-toastify": "^9.0.8",
+    "react-tooltip": "^4.2.21",
+    "react-use": "^17.4.0",
+    "styled-components": "^5.3.5",
+    "swr": "^1.3.0"
+  },
+  "devDependencies": {
+    "@types/react": "18.0.20",
+    "typescript": "4.8.3"
   }
 }
