@@ -1,3 +1,5 @@
+import { ObjectId } from "mongoose";
+
 export type TJustifyContent =
   | "flex-start"
   | "flex-end"
@@ -24,3 +26,11 @@ export interface IFlexBoxProps {
   width?: "xsm" | "sm" | "md" | "lg" | "xl";
   gap?: "xxxs" | "xxs" | "xs" | "sm" | "md" | "lg" | "xl" | "xxl" | "xxxl";
 }
+
+export interface IQuestion {
+  id: ObjectId | string;
+  name: string;
+  url: string;
+}
+
+export type TQuestions = IQuestion[];

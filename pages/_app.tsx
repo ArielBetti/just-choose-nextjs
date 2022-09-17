@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { RecoilRoot } from "recoil";
 import useThemeDetector from "../hooks/useThemeDetector";
 
 import Head from "next/head";
@@ -23,45 +23,50 @@ function MyApp({ Component, pageProps }: AppProps) {
     : selectTheme("ligth");
 
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <AppToastContainer
-        progressStyle={{ background: theme?.colors?.primary }}
-        theme="dark"
-        autoClose={2500}
-      />
-      <Head>
-        <title>JustChoose</title>
-      </Head>
-      <Container>
-        <Link href="/">
-          <h3 style={{ cursor: "pointer" }}>{"<JustChoose/>"}</h3>
-        </Link>
-        <Component {...pageProps} />
-        <FlexBox direction="column" align="flex-start" justify="flex-start">
-          <h2>Apoie o criador:</h2>
-          <FlexBox
-            direction="row"
-            align="flex-start"
-            justify="flex-start"
-            gap="sm"
-          >
-            <a target="_blank" href="https://github.com/ArielBetti">
-              <FaGithub cursor="pointer" size="30px" />
-            </a>
-            <a target="_blank" href="https://www.linkedin.com/in/ariel-betti/">
-              <FaLinkedinIn cursor="pointer" size="30px" />
-            </a>
-            <a
-              target="_blank"
-              href="https://www.youtube.com/channel/UCXCyTeW1V33Ki4PyMLCn2zg"
+    <RecoilRoot>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <AppToastContainer
+          progressStyle={{ background: theme?.colors?.primary }}
+          theme="dark"
+          autoClose={2500}
+        />
+        <Head>
+          <title>JustChoose</title>
+        </Head>
+        <Container>
+          <Link href="/">
+            <h3 style={{ cursor: "pointer" }}>{"<JustChoose/>"}</h3>
+          </Link>
+          <Component {...pageProps} />
+          <FlexBox direction="column" align="flex-start" justify="flex-start">
+            <h2>Apoie o criador:</h2>
+            <FlexBox
+              direction="row"
+              align="flex-start"
+              justify="flex-start"
+              gap="sm"
             >
-              <FaYoutube cursor="pointer" size="30px" />
-            </a>
+              <a target="_blank" href="https://github.com/ArielBetti">
+                <FaGithub cursor="pointer" size="30px" />
+              </a>
+              <a
+                target="_blank"
+                href="https://www.linkedin.com/in/ariel-betti/"
+              >
+                <FaLinkedinIn cursor="pointer" size="30px" />
+              </a>
+              <a
+                target="_blank"
+                href="https://www.youtube.com/channel/UCXCyTeW1V33Ki4PyMLCn2zg"
+              >
+                <FaYoutube cursor="pointer" size="30px" />
+              </a>
+            </FlexBox>
           </FlexBox>
-        </FlexBox>
-      </Container>
-    </ThemeProvider>
+        </Container>
+      </ThemeProvider>
+    </RecoilRoot>
   );
 }
 

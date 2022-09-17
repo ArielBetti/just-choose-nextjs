@@ -1,15 +1,23 @@
-import { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import Confetti from "react-confetti";
-import { useWindowSize } from "react-use";
+import { useRecoilState } from "recoil";
+import { useTheme } from "styled-components";
+import { useRouter } from "next/router";
 import { mutate } from "swr";
-import { notificationPush } from "../../../helpers/notificationPush";
+import { ObjectId } from "mongoose";
+import { useWindowSize } from "react-use";
+import Confetti from "react-confetti";
+
+import { onAddFavorites } from "../../../helpers/addOnFavorites";
 import { requester } from "../../../requester";
-import { FlexBox } from "../../Atoms/atoms";
+import { atomFavorites } from "../../../store/atoms";
+import { FlexBox, IconCard } from "../../Atoms/atoms";
 import Button from "../../Atoms/Button";
 
 // atom: components
 import * as Atom from "./atoms";
+import { MdFavorite } from "react-icons/md";
+import ReactTooltip from "react-tooltip";
+import { toast } from "react-toastify";
 
 // types
 interface IbuttonScape {
@@ -23,8 +31,9 @@ interface IbuttonScape {
 const QuestionCard = ({
   question,
 }: {
-  question: { question: string; answers: number };
+  question: { question: string; answers: number; _id: ObjectId | string };
 }) => {
+  const theme = useTheme();
   const router = useRouter();
   const { id } = router.query;
 
@@ -39,6 +48,10 @@ const QuestionCard = ({
   const [mouseY, setMouseY] = useState<number>(0);
   const [transformButtonAbsolute, setTransformButtonAbsolute] =
     useState<boolean>(false);
+
+  // recoil: states
+  const [favoriteQuestions, setFavoriteQuestions] =
+    useRecoilState(atomFavorites);
 
   const [buttonScape, setButtonScape] = useState<IbuttonScape>({
     top: 0,
@@ -99,15 +112,34 @@ const QuestionCard = ({
 
   const sendAnswer = async (id) => {
     try {
-      const { data } = await requester({}).put(`/api/question/${id}`);
+      const { data }: any = await toast.promise(
+        requester({}).put(`/api/question/${id}`),
+        {
+          pending: "Enviando resposta",
+          success: "Resposta enviada com sucesso! 👌",
+          error: "Ocorreu um erro no envio da resposta. 🤯",
+        }
+      );
 
       setShowConfetti(true);
-      notificationPush("success", "Resposta enviada com sucesso!");
       setFakeQuestionAnsewrs(fakeQuestionAnsewrs + 1);
       return mutate(`/api/question/${id}`, data, false);
     } catch (error) {
-      return notificationPush("error", "Ocorreu um erro no envio da resposta.");
+      return;
     }
+  };
+
+  const addFavoriteQuestion = () => {
+    onAddFavorites(
+      question._id,
+      {
+        id: question?._id,
+        name: question?.question,
+        url: `/question/${question?._id}`,
+      },
+      favoriteQuestions,
+      setFavoriteQuestions
+    );
   };
 
   useEffect(() => {
@@ -151,21 +183,29 @@ const QuestionCard = ({
         align="center"
         direction="row"
       >
-        <Atom.AnswerBadge type="yes">
-          <span>
-            Sim: <strong>{fakeQuestionAnsewrs}</strong>
-          </span>
-        </Atom.AnswerBadge>
-        <Atom.AnswerBadge type="no">
-          <span>
-            Não: <strong>0</strong>
-          </span>
-        </Atom.AnswerBadge>
+        <FlexBox gap="xxs" justify="flex-start" align="center" direction="row">
+          <Atom.AnswerBadge type="yes">
+            <span>
+              Sim: <strong>{fakeQuestionAnsewrs}</strong>
+            </span>
+          </Atom.AnswerBadge>
+          <Atom.AnswerBadge type="no">
+            <span>
+              Não: <strong>0</strong>
+            </span>
+          </Atom.AnswerBadge>
+        </FlexBox>
+        <IconCard
+          onClick={() => addFavoriteQuestion()}
+          data-tip="Adicionar aos favoritos"
+        >
+          <MdFavorite />
+        </IconCard>
       </Atom.BadgesContainer>
       <Atom.Card onMouseMove={(event: any) => observeMousemose(event)}>
         <FlexBox justify="center" align="center" direction="row">
           <Atom.Question>
-            <h6>{question?.question}</h6>
+            <Atom.QuestionTitle>{question?.question}</Atom.QuestionTitle>
           </Atom.Question>
         </FlexBox>
         <FlexBox justify="space-evenly" align="center" direction="row">
@@ -183,6 +223,10 @@ const QuestionCard = ({
           </Atom.ButtonPosition>
         </FlexBox>
       </Atom.Card>
+      <ReactTooltip
+        backgroundColor={theme?.font?.colors?.dark}
+        textColor={theme?.font?.colors?.white}
+      />
     </FlexBox>
   );
 };

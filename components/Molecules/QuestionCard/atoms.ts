@@ -18,6 +18,10 @@ export const Card = styled.div`
   position: relative;
 `;
 
+export const QuestionTitle = styled.h1`
+  font-size: 20px;
+`;
+
 export const BadgesContainer = styled(FlexBox)`
   margin-bottom: ${(props) => props?.theme?.spacing?.xs};
 `;

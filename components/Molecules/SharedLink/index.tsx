@@ -1,28 +1,54 @@
+import { useMemo } from "react";
+import { useRecoilValue, useRecoilState } from "recoil";
 import { useRouter } from "next/router";
 import ReactTooltip from "react-tooltip";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { toast } from "react-toastify";
 import { useTheme, DefaultTheme } from "styled-components";
 
 // icons
-import { MdCopyAll, MdLink } from "react-icons/md";
+import { MdCopyAll, MdFavorite, MdLink } from "react-icons/md";
 
 // atoms
-import * as Atom from "./atoms";
+import { IconCard } from "../../Atoms/atoms";
 import { FlexBox } from "../../Atoms/atoms";
 import Input from "../../Atoms/Input";
-import { JUST_CHOOSE_BASE_URI } from "../../../utils/configs";
+
 import { notificationPush } from "../../../helpers/notificationPush";
+import { atomFavorites, atomNewQuestion } from "../../../store/atoms";
+import { onAddFavorites } from "../../../helpers/addOnFavorites";
+import { JUST_CHOOSE_BASE_URI } from "../../../utils/configs";
 
 // ::
-const SharedLink = ({ link }: { link: string }) => {
+const SharedLink = () => {
   const router = useRouter();
   const theme: DefaultTheme = useTheme();
 
+  // recoil: states
+  const question = useRecoilValue(atomNewQuestion);
+  const [favoriteQuestions, setFavoriteQuestions] =
+    useRecoilState(atomFavorites);
+
+  const questionSharedUrl = useMemo(() => {
+    if (question?.url) {
+      return `${JUST_CHOOSE_BASE_URI}/${question?.url}`;
+    }
+    return "";
+  }, [question]);
+
   const onGoToLink = (): void => {
-    if (link) {
-      const linkRouter = link.replace(JUST_CHOOSE_BASE_URI, "");
-      router.push(linkRouter);
+    if (question?.url) {
+      router.push(question.url);
+    }
+  };
+
+  const addFavorite = () => {
+    if (question?.id) {
+      onAddFavorites(
+        question?.id,
+        question,
+        favoriteQuestions,
+        setFavoriteQuestions
+      );
     }
   };
 
@@ -30,25 +56,34 @@ const SharedLink = ({ link }: { link: string }) => {
     <>
       <FlexBox direction="row" justify="flex-start" align="center" gap="xxs">
         <Input
-          value={link || ""}
+          value={questionSharedUrl}
           placeholder="Seu link será apresentado aqui."
           readOnly
         />
-        <Atom.IconCard onClick={() => onGoToLink()} data-tip="Ir para o link">
+        <IconCard onClick={() => onGoToLink()} data-tip="Ir para o link">
           <MdLink size="16" />
-        </Atom.IconCard>
+        </IconCard>
         <CopyToClipboard
-          text={link}
+          text={questionSharedUrl}
           onCopy={() =>
             notificationPush("info", "Link copiado para área de transferência")
           }
         >
-          <Atom.IconCard data-tip="Copiar link">
+          <IconCard data-tip="Copiar link">
             <MdCopyAll size="16" />
-          </Atom.IconCard>
+          </IconCard>
         </CopyToClipboard>
+        <IconCard
+          onClick={() => addFavorite()}
+          data-tip="Adicionar proposta aos favoritos"
+        >
+          <MdFavorite size="16" />
+        </IconCard>
       </FlexBox>
-      <ReactTooltip backgroundColor={theme?.font?.colors?.dark} textColor={theme?.font?.colors?.white} />
+      <ReactTooltip
+        backgroundColor={theme?.font?.colors?.dark}
+        textColor={theme?.font?.colors?.white}
+      />
     </>
   );
 };

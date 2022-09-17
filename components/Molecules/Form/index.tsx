@@ -12,6 +12,8 @@ import Button from "../../Atoms/Button";
 import Input from "../../Atoms/Input";
 import { JUST_CHOOSE_BASE_URI } from "../../../utils/configs";
 import { notificationPush } from "../../../helpers/notificationPush";
+import { IQuestion } from "../../../interfaces";
+import { toast } from "react-toastify";
 
 // ::
 const Form = ({
@@ -19,7 +21,7 @@ const Form = ({
   setId,
 }: {
   questionForm: { question: string };
-  setId: Dispatch<SetStateAction<string>>;
+  setId: Dispatch<SetStateAction<IQuestion>>;
 }) => {
   const [form, setForm] = useState({
     question: questionForm?.question,
@@ -29,15 +31,23 @@ const Form = ({
 
   const postData = async (form) => {
     try {
-      const { data } = await requester({}).post("/api/question", form);
+      const { data }: any = await toast.promise(
+        requester({}).post("/api/question", form),
+        {
+          pending: "Enviando proposta",
+          success: "Proposta cadastrada com sucesso! 👌",
+          error: "Ocoreu um erro no cadastro da proposta. 🤯",
+        }
+      );
 
       setMessage("");
       setError("");
-
-      notificationPush("success", "Proposta cadastrada com sucesso!")
-      return setId(`${JUST_CHOOSE_BASE_URI}/question/${data?.question?._id}`);
+      return setId({
+        id: data?.question?._id,
+        name: data?.question?.question,
+        url: `/question/${data?.question?._id}`,
+      });
     } catch (error) {
-      notificationPush("error", "Ocoreu um erro no cadastro da proposta.")
       return setMessage("Ocorreu um erro, tente novamente.");
     }
   };
