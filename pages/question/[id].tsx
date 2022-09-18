@@ -5,12 +5,36 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { requester } from "../../requester";
 import { FlexBox, SkeletonContainer } from "../../components/Atoms/atoms";
 import QuestionCard from "../../components/Molecules/QuestionCard";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { IEndpointQuestion } from "../../interfaces";
 
-const QuestionPage = ({ question, __error }) => {
-  const route = useRouter();
+const QuestionPage = () => {
+  const [question, setQuestion] = useState<IEndpointQuestion>();
+
+  const router = useRouter();
   const theme = useTheme();
+  const { id } = router.query;
 
-  if (__error) return route.push("/");
+  const fetchQuestion = async () => {
+    try {
+      const { data }: any = await toast.promise(
+        requester({}).get(`/api/question/${id}`),
+        {
+          pending: "Carregando proposta",
+          error: "Ocoreu um erro em carregar essa proposta. 🤯",
+        }
+      );
+
+      return setQuestion(data?.question);
+    } catch (error) {
+      return router.push("/");
+    }
+  };
+
+  useEffect(() => {
+    fetchQuestion();
+  }, []);
 
   return (
     <FlexBox direction="column" justify="center" align="center">
@@ -31,15 +55,5 @@ const QuestionPage = ({ question, __error }) => {
     </FlexBox>
   );
 };
-
-export async function getServerSideProps({ params }) {
-  try {
-    const { data } = await requester({}).get(`/api/question/${params?.id}`);
-
-    return { props: { question: data?.question } };
-  } catch (error) {
-    return { props: { question: {}, __error: error } };
-  }
-}
 
 export default QuestionPage;

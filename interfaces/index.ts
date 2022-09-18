@@ -33,4 +33,10 @@ export interface IQuestion {
   url: string;
 }
 
+export interface IEndpointQuestion {
+  _id: ObjectId | string;
+  question: string;
+  answers: number;
+}
+
 export type TQuestions = IQuestion[];

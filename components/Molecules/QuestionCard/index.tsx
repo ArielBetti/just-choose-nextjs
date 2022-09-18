@@ -18,6 +18,7 @@ import * as Atom from "./atoms";
 import { MdFavorite } from "react-icons/md";
 import ReactTooltip from "react-tooltip";
 import { toast } from "react-toastify";
+import { IEndpointQuestion } from "../../../interfaces";
 
 // types
 interface IbuttonScape {
@@ -28,17 +29,13 @@ interface IbuttonScape {
 }
 
 // ::
-const QuestionCard = ({
-  question,
-}: {
-  question: { question: string; answers: number; _id: ObjectId | string };
-}) => {
+const QuestionCard = ({ question }: { question: IEndpointQuestion }) => {
   const theme = useTheme();
   const router = useRouter();
   const { id } = router.query;
 
   // states
-  const [fakeQuestionAnsewrs, setFakeQuestionAnsewrs] = useState<number>(
+  const [fakeQuestionAnswers, setFakeQuestionAnswers] = useState<number>(
     question?.answers || 0
   );
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
@@ -122,7 +119,7 @@ const QuestionCard = ({
       );
 
       setShowConfetti(true);
-      setFakeQuestionAnsewrs(fakeQuestionAnsewrs + 1);
+      setFakeQuestionAnswers(fakeQuestionAnswers + 1);
       return mutate(`/api/question/${id}`, data, false);
     } catch (error) {
       return;
@@ -161,7 +158,7 @@ const QuestionCard = ({
   ]);
 
   useEffect(() => {
-    setFakeQuestionAnsewrs(question?.answers || 0);
+    setFakeQuestionAnswers(question?.answers || 0);
   }, [question]);
 
   return (
@@ -186,7 +183,7 @@ const QuestionCard = ({
         <FlexBox gap="xxs" justify="flex-start" align="center" direction="row">
           <Atom.AnswerBadge type="yes">
             <span>
-              Sim: <strong>{fakeQuestionAnsewrs}</strong>
+              Sim: <strong>{fakeQuestionAnswers}</strong>
             </span>
           </Atom.AnswerBadge>
           <Atom.AnswerBadge type="no">
