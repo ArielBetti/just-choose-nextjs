@@ -33,8 +33,10 @@ const QuestionPage = () => {
   };
 
   useEffect(() => {
-    fetchQuestion();
-  }, []);
+    if (id) {
+      fetchQuestion();
+    }
+  }, [id]);
 
   return (
     <FlexBox direction="column" justify="center" align="center">

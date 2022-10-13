@@ -30,7 +30,7 @@ const SharedLink = () => {
 
   const questionSharedUrl = useMemo(() => {
     if (question?.url) {
-      return `${JUST_CHOOSE_BASE_URI}/${question?.url}`;
+      return `${JUST_CHOOSE_BASE_URI}${question?.url}`;
     }
     return "";
   }, [question]);
