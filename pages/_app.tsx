@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { RecoilRoot } from "recoil";
 import useThemeDetector from "../hooks/useThemeDetector";
 
@@ -7,20 +8,46 @@ import { AppProps } from "next/app";
 import { ThemeProvider, DefaultTheme } from "styled-components";
 import GlobalStyle from "../components/GlobalStyles";
 import selectTheme from "../theme";
+
+// css
 import "react-toastify/dist/ReactToastify.min.css";
 import "react-loading-skeleton/dist/skeleton.css";
+import "nprogress/nprogress.css";
 
 import { Container } from "../components/Atoms/Container";
 import { AppToastContainer, FlexBox } from "../components/Atoms/atoms";
 import { FaGithub, FaLinkedinIn, FaYoutube } from "react-icons/fa";
+import { useRouter } from "next/router";
+import NProgress from "nprogress";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
   const isDarkTheme = useThemeDetector();
 
   // theme changer
   const theme: DefaultTheme = isDarkTheme
     ? selectTheme("dark")
     : selectTheme("ligth");
+
+  useEffect(() => {
+    const handleStart = (_url: string) => {
+      NProgress.start();
+    };
+
+    const handleStop = () => {
+      NProgress.done();
+    };
+
+    router.events.on("routeChangeStart", handleStart);
+    router.events.on("routeChangeComplete", handleStop);
+    router.events.on("routeChangeError", handleStop);
+
+    return () => {
+      router.events.off("routeChangeStart", handleStart);
+      router.events.off("routeChangeComplete", handleStop);
+      router.events.off("routeChangeError", handleStop);
+    };
+  }, [router]);
 
   return (
     <RecoilRoot>

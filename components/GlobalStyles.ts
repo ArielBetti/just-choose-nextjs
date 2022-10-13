@@ -17,6 +17,17 @@ const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box;
   }
+
+  #nprogress .bar {
+    background: ${({ theme }) => theme.colors.primary};
+  }
+
+  #nprogress .spinner-icon {
+    width: 25px;
+    height: 25px;
+    border: solid 3px transparent;
+  }
+
 `;
 
 export default GlobalStyle;
